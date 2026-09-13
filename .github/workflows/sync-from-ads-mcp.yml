@@ -1,0 +1,107 @@
+# DEPLOYED FILE — this is the canonical copy, but it does not run from this repo.
+#
+# It lives at .github/workflows/sync-from-ads-mcp.yml inside
+# Adspirer/adspirer-cursor-plugin, the company-owned repository submitted to Cursor.
+#
+# Cursor Marketplace versions are reviewed and pinned. Unlike the Grok Build mirror,
+# this workflow is deliberately manual: release a validated package, bump its semantic
+# version, then ask the Cursor team to review that exact commit.
+
+name: Sync from ads-mcp
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-from-ads-mcp
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the plugin tree from ads-mcp
+        run: |
+          set -euo pipefail
+          git clone --depth=1 https://github.com/amekala/ads-mcp.git /tmp/src
+          test -d /tmp/src/plugins/cursor/adspirer || {
+            echo "::error::plugins/cursor/adspirer is missing upstream"
+            exit 1
+          }
+          echo "UPSTREAM_SHA=$(git -C /tmp/src rev-parse --short HEAD)" >> "$GITHUB_ENV"
+
+      - name: Validate before adopting
+        run: |
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import re
+          import sys
+
+          root = pathlib.Path("/tmp/src/plugins/cursor/adspirer")
+          manifest_path = root / ".cursor-plugin/plugin.json"
+          errors = []
+
+          if not manifest_path.is_file():
+              errors.append(".cursor-plugin/plugin.json is missing")
+          else:
+              manifest = json.loads(manifest_path.read_text())
+              if manifest.get("name") != "adspirer":
+                  errors.append("manifest name must be adspirer")
+              if not re.fullmatch(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)", manifest.get("version", "")):
+                  errors.append("manifest version must be strict semver")
+              for field in ("displayName", "description", "author", "homepage", "repository", "license", "logo"):
+                  if not manifest.get(field):
+                      errors.append(f"manifest is missing {field}")
+              logo = manifest.get("logo")
+              if logo and not (root / logo).is_file():
+                  errors.append(f"logo {logo!r} does not exist")
+
+          mcp_path = root / "mcp.json"
+          if not mcp_path.is_file():
+              errors.append("mcp.json is missing")
+          else:
+              mcp = json.loads(mcp_path.read_text())
+              server = mcp.get("mcpServers", {}).get("adspirer", {})
+              if server != {"type": "http", "url": "https://mcp.adspirer.com/mcp"}:
+                  errors.append("unexpected Adspirer MCP configuration")
+
+          for required in ("README.md", "LICENSE", "CHANGELOG.md", "skills", "agents", "rules"):
+              if not (root / required).exists():
+                  errors.append(f"{required} is missing")
+
+          if errors:
+              for error in errors:
+                  print(f"::error::{error}", file=sys.stderr)
+              sys.exit(1)
+          print("upstream Cursor package OK — adspirer")
+          PY
+
+      - name: Replace the distributable tree
+        run: |
+          set -euo pipefail
+          find . -mindepth 1 -maxdepth 1 -not -name '.git' -not -name '.github' -exec rm -rf {} +
+          src=/tmp/src/plugins/cursor/adspirer
+          cp -R "$src/.cursor-plugin" .
+          cp -R "$src/agents" "$src/assets" "$src/rules" "$src/skills" .
+          cp "$src/CHANGELOG.md" "$src/LICENSE" "$src/README.md" "$src/mcp.json" .
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "already in sync with ads-mcp@${UPSTREAM_SHA} — nothing to do"
+            exit 0
+          fi
+          git commit -m "sync: adspirer from ads-mcp@${UPSTREAM_SHA}"
+          git push
+          echo "published adspirer (from ads-mcp@${UPSTREAM_SHA})"
