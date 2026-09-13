@@ -98,12 +98,7 @@ guidance loaded by Cursor.
 - Website: [adspirer.com](https://www.adspirer.com)
 - Connections: [adspirer.com/connections](https://www.adspirer.com/connections)
 - Support: [support@adspirer.com](mailto:support@adspirer.com)
-- Marketplace source: [Adspirer/adspirer-cursor-plugin](https://github.com/Adspirer/adspirer-cursor-plugin)
-- Development source: [amekala/ads-mcp](https://github.com/amekala/ads-mcp)
-
-The company-owned marketplace repository is generated from `plugins/cursor/adspirer/` in the
-development source. Open issues and pull requests there; direct edits to the distribution may be
-overwritten by its synchronization workflow.
+- Source and issues: [Adspirer/adspirer-cursor-plugin](https://github.com/Adspirer/adspirer-cursor-plugin)
 
 ## License
 

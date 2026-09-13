@@ -1,0 +1,63 @@
+name: Validate Cursor plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate JSON and Cursor manifest schema
+        run: |
+          jq empty .cursor-plugin/plugin.json mcp.json
+          curl -fsSLo /tmp/cursor-plugin.schema.json \
+            https://raw.githubusercontent.com/cursor/plugins/main/schemas/plugin.schema.json
+          npx --yes --package ajv-cli@5 --package ajv-formats@3 ajv validate \
+            --spec=draft7 \
+            -s /tmp/cursor-plugin.schema.json \
+            -d .cursor-plugin/plugin.json \
+            -c ajv-formats
+
+      - name: Validate package shape and MCP configuration
+        run: |
+          set -euo pipefail
+          test "$(jq -r '.name' .cursor-plugin/plugin.json)" = "adspirer"
+          test "$(jq -r '.mcpServers.adspirer.type' mcp.json)" = "http"
+          test "$(jq -r '.mcpServers.adspirer.url' mcp.json)" = "https://mcp.adspirer.com/mcp"
+          test -f assets/icon.png
+          test -f README.md
+          test -f LICENSE
+          test -f CHANGELOG.md
+          test -f agents/performance-marketing-agent.md
+          test -d rules
+          test -d skills
+          test -z "$(find . -path './.git' -prune -o -path './.github' -prune -o \
+            \( -name 'hooks.json' -o -name '*.sh' -o -name '*.exe' \) -print)"
+
+      - name: Validate component frontmatter
+        run: |
+          set -euo pipefail
+          for file in skills/*/SKILL.md agents/*.md; do
+            test "$(head -n 1 "$file")" = "---"
+            sed -n '2,/^---$/p' "$file" | grep -q '^name:'
+            sed -n '2,/^---$/p' "$file" | grep -q '^description:'
+          done
+          for file in rules/*.mdc; do
+            test "$(head -n 1 "$file")" = "---"
+            sed -n '2,/^---$/p' "$file" | grep -q '^description:'
+          done
+
+      - name: Check whitespace
+        run: git diff --check
