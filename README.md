@@ -1,6 +1,6 @@
 # Adspirer for Cursor and Grok Bot
 
-Create, analyze, and optimize paid-media campaigns without leaving Cursor. Adspirer connects
+AI advertising agent for growing your business. Create, analyze, and optimize ad campaigns—with your approval—without leaving Cursor. Adspirer connects
 Cursor and Grok Bot to live ad accounts on Google Ads, Meta Ads, TikTok Ads, LinkedIn Ads,
 Amazon Ads, and ChatGPT Ads through Adspirer's hosted MCP server.
 
