@@ -1,9 +1,5 @@
 # Changelog
 
-## 1.0.3
-
-- Lead the marketplace description with the advertising specialty for clearer truncated previews.
-
 ## 1.0.2 - 2026-09-29
 
 - `adspirer-mcp` skill: stop asking for the user's request as `intent` (the Adspirer MCP server no longer takes it), and call `get_tool_schema` through a platform router when a client doesn't list it.
