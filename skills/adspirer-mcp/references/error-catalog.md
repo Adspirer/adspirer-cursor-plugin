@@ -88,13 +88,11 @@ limited. If a write is blocked, stop — do not retry in a loop.
 
 **`audit_conversion_tracking` says "You have N google_ads accounts connected. Please specify..." even though you sent `customer_id`**
 Known bug ([amekala/ads-mcp#41](https://github.com/amekala/ads-mcp/issues/41)). With more than one
-Google Ads account connected, the audit ignores `customer_id` and returns that message. Always send the
-account id explicitly; in testing the audit succeeded with an explicit `customer_id` even
-with several accounts connected. If the message still comes back, retry the same call once. If it
-comes back the same, stop. Fall back to read-only conversion-action and per-action reads through the
-`google_ads` router, or read the conversion actions in the Google Ads UI
-(`adspirer-ads-manager-browser`). Calling `switch_primary_account` changes which account later calls
-treat as active, so only do it after the user's yes. Do not keep retrying, and do not treat the message as proof that
+Google Ads account connected, the audit ignores `customer_id` and returns that message. Retry the
+same call once. If it comes back the same, stop. Either ask the user and call
+`switch_primary_account` for the account they name — that changes which account later calls treat
+as active, so confirm first — or read the conversion actions in the Google Ads UI
+(`adspirer-ads-manager-browser`). Do not keep retrying, and do not treat the message as proof that
 tracking is broken.
 
 **"Asset bundle expired"**

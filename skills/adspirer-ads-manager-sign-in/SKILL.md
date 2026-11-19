@@ -37,11 +37,7 @@ the user has marked out of scope. Ask which to sign in to now. One platform at a
 
 For ChatGPT Ads, open only a URL the user or Adspirer gives you. Never guess one.
 
-## 2. Sign in: saved login or password manager first, then hand over control
-
-If the host has a saved-login vault or a password-manager integration the user already connected, use it first. **On Grok Bot:** a saved Vault login, then 1Password where it is connected (the agent asks 1Password, the user approves the request in the 1Password app, and 1Password fills the login; the agent never sees the password; this is rolling out gradually). Offer to connect 1Password only if the user says they use it. Ad platforms often still need a phone prompt or account picker, so hand over control when the fill can't finish.
-
-### Hand over control
+## 2. Hand over control
 
 Use your host's take-control / hand-off-the-browser mechanism, and open the login page as part of
 that handoff. Don't run a separate "am I already signed in?" pass first. If they are already

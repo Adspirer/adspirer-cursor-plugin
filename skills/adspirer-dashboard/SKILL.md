@@ -34,14 +34,6 @@ Missing fields say "not available". Never 0, and never a smoothed or backfilled 
 
 
 
-## Where it goes
-
-Every report (scorecard, audit, waste review, keyword plan, competitor read) is a visual surface with a one or two line summary and the link in the conversation. A short quick answer stays in the conversation.
-
-- **On Grok Bot, use Pages.** Build a wide Page from the saved results (a metrics strip, a line chart of daily spend and clicks, bars for spend by campaign, and a campaign table), with every number labeled with platform, account, dates, timezone, and currency. Keep the Page's id and edit the same Page on later runs instead of making a new one. Only the user changes a Page's sharing, from the share control on the Page.
-- **On a host with live artifacts or sites** (see `adspirer-agent/references/host-surfaces.md`), use that, updated in place.
-- **Elsewhere**, an HTML or Markdown file.
-
 If they want a file, write one self-contained HTML page in the project and tell them the path. Embed the figures. Don't fetch a chart library from a third-party host unless they asked for that. Don't invent a screenshot you didn't take.
 
 On hosts with none of those surfaces, the dashboard is the table and the few comparisons above, in the conversation.

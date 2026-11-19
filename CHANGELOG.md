@@ -1,13 +1,5 @@
 # Changelog
 
-## 1.2.0 - 2026-11-18
-
-- Reports go to a visual surface: on Grok Bot every report (scorecard, audit, waste review, keyword plan, competitor read, tracking check) is a Page with a one or two line summary and the link in chat, and later runs edit the same Page; on hosts with artifacts or sites, use those; elsewhere, an HTML or Markdown file. Only the user changes who can see a Page.
-- Ads-manager browser checks go deeper on Google Ads and Meta: Google conversions summary and settings (counting, value, placeholder "XXX" currency), tag diagnostics, change history, auction insights, disapproved ads, and recommendations; Meta Events Manager (pixel and Conversions API health, match quality, deduplication, diagnostics), Ads Manager delivery and learning status, and Account Quality. Deep links keep the signed-in account, screenshots are kept as evidence, and a UI change happens only after a yes for that exact change, with a read-back.
-- Ads-manager sign-in uses a saved login or a connected password manager first. On Grok Bot that is a Vault login or 1Password (the user approves in the 1Password app and the agent never sees the password), then the take-control handoff.
-- Measurement: always pass the account id to `audit_conversion_tracking`; if it still asks which account, retry once, then fall back to read-only conversion-action reads. Report an account Adspirer lists as not connected as a connection gap, not broken tracking. When two reads conflict, say so and check the platform UI before recommending a fix.
-- `adspirer-agent` host surfaces add a Grok Bot section: Pages, routines that skip runs while a connector is signed out, per-tool permission levels (suggest Needs approval for write tools), 1Password sign-in, and bot files.
-
 ## 1.1.0 - 2026-10-20
 
 - Lessons from the Grok Bot advertising agent, adapted for every host.
