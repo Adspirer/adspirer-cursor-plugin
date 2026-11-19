@@ -63,7 +63,6 @@ Audit my conversion tracking before I launch anything.
 | `adspirer-performance-review` | Cross-channel scorecard. Read-only |
 | `adspirer-dashboard` | Charts from those same numbers. Read-only |
 | `adspirer-digest` | Email or Slack draft. Sends only after a fresh yes |
-| `adspirer-ads-manager-sign-in` | User signs into each ads manager in the agent browser. No passwords in chat |
 | `adspirer-ads-manager-browser` | Read-only conversion check in each ads manager's own UI |
 | `adspirer-keywords` | Keyword ideas, search terms, and negative candidates |
 | `adspirer-creative` | Headlines, descriptions, primary text, creative fatigue |
