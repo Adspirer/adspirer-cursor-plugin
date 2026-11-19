@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 - 2026-11-19
+
+- Removed the adspirer-ads-manager-sign-in skill (test change); browser checks now ask the user to sign in themselves.
+
 ## 1.1.0 - 2026-10-20
 
 - Lessons from the Grok Bot advertising agent, adapted for every host.
