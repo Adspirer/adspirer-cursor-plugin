@@ -41,8 +41,13 @@ actions that use the tag. Two primaries for the same event (tag and GA4 both cou
 double-count. On Google, compare Conversions with All conv. — a wide gap means bidding is ignoring
 most of the activity. Primary versus secondary is set in the ads UI, not via Adspirer.
 
-If the audit ignores `customer_id` ("You have N google_ads accounts connected. Please specify..."),
-retry once, then the error catalog in `adspirer-mcp`. The UI read, when you need the method the API
+Always pass the account id explicitly to the audit; it works with an explicit id even when several
+accounts are connected. If it still says "You have N google_ads accounts connected. Please specify...",
+retry once, then fall back to read-only conversion-action reads (see the error catalog in `adspirer-mcp`).
+An account Adspirer reports as not connected is a connection gap, not broken tracking: send the user
+to `https://adspirer.ai/connections`. Check counting (one per click for leads, every for purchases)
+and flag a placeholder currency "XXX". When two reads conflict (the audit says no primary actions
+while the account records conversions), say so and verify in the platform UI before recommending a fix. The UI read, when you need the method the API
 can't show, is `adspirer-ads-manager-browser`.
 
 If tracking for the primary goal really is broken, say that before you present a CPA. "How are my

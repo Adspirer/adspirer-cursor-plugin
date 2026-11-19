@@ -177,3 +177,11 @@ the right default for a performance review; daily is for accounts spending enoug
    revisit or send to someone.
 3. **Ask before publishing anything that leaves the conversation.** A shared page is outward-facing.
 4. **If the host can't do it, say so once and move on.** A markdown table is a fine answer.
+
+## Grok Bot — Pages, routines, and sign-in
+
+- **Pages.** A Grok Bot can build Pages, such as reports, memos, and dashboards, that the user edits with it or has the bot keep up to date. Deliver every report as a Page with a one or two line summary and the link in the chat; edit the same Page on later runs. Pages are saved in the user's Library; only the user changes who can see a Page, from its share control.
+- **Routines** are Grok Bot's scheduler. A routine that loses a connector sign-in skips its scheduled runs until the user signs back in, and its reconnect card reaches the user. Routines can read the earlier conversation in the chat they run in.
+- **Tool permissions.** Each connector tool can be set to Always allow, Auto-review, Needs approval, or Blocked on the connector page. Suggest Needs approval for Adspirer's write tools; the user sets it.
+- **Sign-in.** The bot's own browser signs in with a saved Vault login or 1Password (the user approves each login in the 1Password app; the bot never sees it), else the user takes control of the bot's computer (`request_box_help`).
+- **Files.** Asking the bot to save a file to its Library puts it in the bot's files for everyone who can use the bot; brand guides and past reports belong there.
